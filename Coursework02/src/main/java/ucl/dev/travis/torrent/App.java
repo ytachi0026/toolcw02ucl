@@ -35,11 +35,25 @@ public class App implements CommandLineRunner{
 		 * Get the first build fail!
 		 * 
 		 */
+		boolean failBuild = false;
+		
+		System.out.println("ANALYSIS");
 		for(TravisBuild info : travisTorrentInfoProject){
-			
-			System.out.println(info);
+			if("master".equals(info.getGit_branch()) && !info.getGh_is_pr()){
+				if("failed".equals(info.getTr_status())){
+					if(!failBuild){
+						failBuild = true;
+						System.out.println("Begin FAILURE: "+info.infoCommit());
+					} else {
+						continue;
+					}
+				}
+				if(failBuild && "passed".equals(info.getTr_status())){
+					System.out.println("Fix FAILURE: "+info.infoCommit());
+					failBuild = false;
+				}
+			}
 		}
-
 	}
 
 	public static void main( String[] args ){

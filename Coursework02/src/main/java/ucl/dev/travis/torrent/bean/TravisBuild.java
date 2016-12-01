@@ -244,5 +244,20 @@ public class TravisBuild implements Serializable{
 				+ ", tr_failed_tests=" + tr_failed_tests + ", tr_tests_ran=" + tr_tests_ran + ", tr_tests_failed="
 				+ tr_tests_failed + "]";
 	}
+
+	public String infoCommit() {
+		return "CommitInfo [tr_started_at=" +tr_started_at+
+				", git_commit=" + git_commit + 
+				", gh_project_name=" + gh_project_name + 
+				", gh_first_commit_created_at=" + gh_first_commit_created_at + 
+				", gh_team_size=" + gh_team_size + 
+				", tr_lan=" + tr_lan +
+				", tr_tests_ok=" + tr_tests_ok + 
+				", tr_tests_fail=" + tr_tests_fail + 
+				", tr_tests_run=" + tr_tests_run +
+				", tr_failed_tests=" + tr_failed_tests +
+				", tr_tests_ran=" + tr_tests_ran + 
+				", tr_tests_failed=" + tr_tests_failed + "]";
+	}
 	
 }
