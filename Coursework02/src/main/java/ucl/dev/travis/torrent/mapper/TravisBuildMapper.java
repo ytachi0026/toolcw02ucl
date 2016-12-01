@@ -14,7 +14,7 @@ public interface TravisBuildMapper {
 	@Select("SELECT * FROM travistorrent_27_10_2016 WHERE row = #{torrentId}")
 	TravisBuild findByTorrentId(@Param("torrentId") Integer torrentId);
 	
-	@Select("SELECT * FROM travistorrent_27_10_2016 WHERE gh_project_name = #{projectName} ORDER BY row ASC")
+	@Select("SELECT * FROM travistorrent_27_10_2016 WHERE gh_project_name = #{projectName} ORDER BY tr_build_id")
 	List<TravisBuild> getDataByProject(@Param("projectName") String projectName);
 	
 	@Select("SELECT DISTINCT gh_project_name, gh_lang FROM travistorrent_27_10_2016 ORDER BY gh_lang")
