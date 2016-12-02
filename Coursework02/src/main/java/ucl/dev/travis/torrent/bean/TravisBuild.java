@@ -47,7 +47,10 @@ public class TravisBuild implements Serializable{
 	private Boolean tr_tests_failed;//tr_tests_failed
 	
 	
-	
+	public static String FAILED_STATUS = "failed";
+	public static String ERRORED_STATUS = "errored";
+	public static String PASSED_STATUS = "passed";
+
 	public BigInteger getRow() {
 		return row;
 	}
@@ -247,7 +250,7 @@ public class TravisBuild implements Serializable{
 
 	public String infoCommit() {
 		return "CommitInfo [ tr_build_id=" + tr_build_id +
-				"tr_started_at=" +Util.niceFormatDate(tr_started_at)+
+				", tr_started_at=" +Util.niceFormatDate(tr_started_at)+
 				", tr_status="+ tr_status +
 				", gh_project_name=" + gh_project_name + 
 				", gh_team_size=" + gh_team_size + 
