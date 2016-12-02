@@ -6,6 +6,7 @@ import java.util.Date;
 @SuppressWarnings("serial")
 public class FixDuration implements Serializable {
 
+	private String gh_project_name;
 	private Integer loc;
 	private Integer durationInDays;
 
@@ -17,6 +18,16 @@ public class FixDuration implements Serializable {
 	}
 	
 	
+	public String getGh_project_name() {
+		return gh_project_name;
+	}
+
+
+	public void setGh_project_name(String gh_project_name) {
+		this.gh_project_name = gh_project_name;
+	}
+
+
 	public Integer getLoc() {
 		return loc;
 	}
@@ -51,8 +62,8 @@ public class FixDuration implements Serializable {
 
 	@Override
 	public String toString() {
-		return "FixDuration [loc=" + loc + ", durationInDays=" + durationInDays + ", failureStart=" + failureStart
-				+ ", failureFix=" + failureFix + "]";
+		return "FixDuration [gh_project_name=" + gh_project_name + ", loc=" + loc + ", durationInDays=" + durationInDays
+				+ ", failureStart=" + failureStart + ", failureFix=" + failureFix + "]";
 	}
 
 }

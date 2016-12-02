@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import ucl.dev.travis.torrent.bean.FixDuration;
 import ucl.dev.travis.torrent.bean.Project;
 import ucl.dev.travis.torrent.bean.TravisBuild;
+import ucl.dev.travis.torrent.mapper.ProjectAnalysisMapper;
 import ucl.dev.travis.torrent.mapper.TravisBuildMapper;
 
 /**
@@ -22,34 +23,50 @@ public class App implements CommandLineRunner {
 	@Autowired
 	TravisBuildMapper travisMapper;
 
+	@Autowired
+	ProjectAnalysisMapper projectAnalysisMapper;
+
 	public void run(String... arg0) throws Exception {
-		// Getting the name of the projects and its languages
-		// List<Project> projects = travisMapper.getProjectsName();
-		// for(Project project : projects){
-		// System.out.println(project);
-		// }
-
-		// Algorithm to get the commit frequency
-		// Project: mybatis/mybatis-3; junit-team/junit; gradle/gradle;
-		// ruby/ruby; heroku/heroku
-		List<TravisBuild> travisTorrentInfoProject = travisMapper.getDataByProject("heroku/heroku");
 		/*
-		 * Get the first build fail!
-		 * 
+		 * Analysis for one project
 		 */
-
 		Project project = new Project("mybatis/mybatis-3", "Java");
+		projectAnalysisMapper.addProject(project);
+		analysisPerProject(project);
+		//analysisAllProjects();
+	}
+
+	public static void main(String[] args) {
+		SpringApplication.run(App.class, args);
+	}
+
+	/**
+	 * Algorithm for all projects
+	 */
+	private void analysisAllProjects() {
+		List<Project> projects = travisMapper.getProjectsName();
+		for (Project project : projects) {
+			projectAnalysisMapper.addProject(project);
+			analysisPerProject(project);
+		}
+	}
+
+	/**
+	 * Algorithm to get the commit frequency. Example: mybatis/mybatis-3
+	 * Project: mybatis/mybatis-3; junit-team/junit; gradle/gradle; ruby/ruby;
+	 * heroku/heroku
+	 */
+	private void analysisPerProject(Project project) {
+		List<TravisBuild> travisTorrentInfoProject = travisMapper.getDataByProject(project.getGh_project_name());
 		boolean failBuild = false;
 		FixDuration detectedFixDuration = null;
-
-		System.out.println("ANALYSIS");
 		for (TravisBuild info : travisTorrentInfoProject) {
 			if (TravisBuild.FAILED_STATUS.equals(info.getTr_status())
 					|| TravisBuild.ERRORED_STATUS.equals(info.getTr_status())) {
 				if (!failBuild) {
-					System.out.println("Begin FAILURE: " + info.infoCommit());
 					failBuild = true;
 					detectedFixDuration = new FixDuration();
+					detectedFixDuration.setGh_project_name(project.getGh_project_name());
 					detectedFixDuration.setFailureStart(info.getTr_started_at());
 					detectedFixDuration.setLoc(info.getGh_sloc());
 				} else {
@@ -57,17 +74,11 @@ public class App implements CommandLineRunner {
 				}
 			}
 			if (failBuild && TravisBuild.PASSED_STATUS.equals(info.getTr_status())) {
-				System.out.println("Fix FAILURE: " + info.infoCommit());
 				failBuild = false;
 				detectedFixDuration.setFailureFix(info.getTr_started_at());
 				project.addFixDuration(detectedFixDuration);
-				System.out.println("\n");
+				projectAnalysisMapper.addFixDurationPorject(detectedFixDuration);
 			}
 		}
-		System.out.println(project);
-	}
-
-	public static void main(String[] args) {
-		SpringApplication.run(App.class, args);
 	}
 }
