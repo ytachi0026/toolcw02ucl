@@ -19,4 +19,7 @@ public interface TravisBuildMapper {
 	
 	@Select("SELECT DISTINCT gh_project_name, gh_lang FROM travistorrent_27_10_2016 ORDER BY gh_lang")
 	List<Project> getProjectsName();
+
+	@Select("SELECT DISTINCT gh_project_name, gh_lang FROM travistorrent_27_10_2016 WHERE gh_lang = #{language}")
+	List<Project> getProjectsNamePerLanguage(@Param("language") String language);
 }

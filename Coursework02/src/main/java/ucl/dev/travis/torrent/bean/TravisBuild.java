@@ -7,6 +7,10 @@ import java.util.Date;
 @SuppressWarnings("serial")
 public class TravisBuild implements Serializable{
 
+	public static final String language_JAVA = "java";
+	public static final String language_RUBY = "ruby";
+	
+	
 	private BigInteger row;//Unique identifier for a build job in TravisTorrent
 	private String git_commit;//SHA1 Hash of the commit which triggered this build (should be unique world-wide)
 	private String git_branch;//Branch git_commit was committed on
