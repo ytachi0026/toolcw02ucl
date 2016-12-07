@@ -39,7 +39,22 @@ public class TravisBuild implements Serializable{
 	private String tr_build_id;//Unique build ID on Travis
 	private String tr_status;//Build status (pass, fail, errored, canceled)
 	private Integer tr_duration;//Overall duration of the build, in seconds
+	
 	private Date tr_started_at;//Start of the build process
+	private Date gh_build_started_at;
+	
+	public Date getGh_build_started_at() {
+		return gh_build_started_at;
+	}
+	public void setGh_build_started_at(Date gh_build_started_at) {
+		this.gh_build_started_at = gh_build_started_at;
+	}
+	public String getGit_commits() {
+		return git_commits;
+	}
+	public String getTr_failed_tests() {
+		return tr_failed_tests;
+	}
 	private Integer tr_build_number;//Build number in the project
 	private String tr_lan;//Language of the build, as recognized by BUILDLOGANALYZER
 	private Integer	tr_tests_ok;// If available (depends on tr_frameworks and tr_analyzer): Number of tests passed
@@ -235,6 +250,8 @@ public class TravisBuild implements Serializable{
 	public void setTr_tests_failed(Boolean tr_tests_failed) {
 		this.tr_tests_failed = tr_tests_failed;
 	}
+	
+	
 	@Override
 	public String toString() {
 		return "TravisBuild [row=" + row + ", git_commit=" + git_commit + ", git_branch=" + git_branch
@@ -245,11 +262,11 @@ public class TravisBuild implements Serializable{
 				+ ", gh_tests_added=" + gh_tests_added + ", gh_tests_deleted=" + gh_tests_deleted + ", gh_src_files="
 				+ gh_src_files + ", gh_sloc=" + gh_sloc + ", gh_test_lines_per_kloc=" + gh_test_lines_per_kloc
 				+ ", gh_test_cases_per_kloc=" + gh_test_cases_per_kloc + ", tr_build_id=" + tr_build_id + ", tr_status="
-				+ tr_status + ", tr_duration=" + tr_duration + ", tr_started_at=" + tr_started_at + ", tr_build_number="
-				+ tr_build_number + ", tr_lan=" + tr_lan + ", tr_tests_ok=" + tr_tests_ok + ", tr_tests_fail="
-				+ tr_tests_fail + ", tr_tests_run=" + tr_tests_run + ", tr_tests_skipped=" + tr_tests_skipped
-				+ ", tr_failed_tests=" + tr_failed_tests + ", tr_tests_ran=" + tr_tests_ran + ", tr_tests_failed="
-				+ tr_tests_failed + "]";
+				+ tr_status + ", tr_duration=" + tr_duration + ", tr_started_at=" + tr_started_at
+				+ ", gh_build_started_at=" + gh_build_started_at + ", tr_build_number=" + tr_build_number + ", tr_lan="
+				+ tr_lan + ", tr_tests_ok=" + tr_tests_ok + ", tr_tests_fail=" + tr_tests_fail + ", tr_tests_run="
+				+ tr_tests_run + ", tr_tests_skipped=" + tr_tests_skipped + ", tr_failed_tests=" + tr_failed_tests
+				+ ", tr_tests_ran=" + tr_tests_ran + ", tr_tests_failed=" + tr_tests_failed + "]";
 	}
 
 	public String infoCommit() {

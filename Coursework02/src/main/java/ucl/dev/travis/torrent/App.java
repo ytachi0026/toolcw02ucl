@@ -36,7 +36,8 @@ public class App implements CommandLineRunner {
 
 	public void run(String... arg0) throws Exception {
 		System.out.println("BEGIN- Analysis per language");
-		analysisProjectsLanguaje(TravisBuild.language_JAVA);
+		analysisProjectsLanguaje(TravisBuild.language_RUBY,"travistorrent_6_12_2016");
+//		oneProjectAnalysis();
 		System.out.println("END");
 	}
 
@@ -47,13 +48,13 @@ public class App implements CommandLineRunner {
 	/**
 	 * Algorithm for all projects per language
 	 */
-	private void analysisProjectsLanguaje(String language) {
+	private void analysisProjectsLanguaje(String language, String dumpTravis) {
 		List<Project> projects = travisMapper.getProjectsNamePerLanguage(language);
 
-		Path path = Paths.get("analysis_" + language + ".csv");
+		Path path = Paths.get("analysis_" + language + "_"+dumpTravis+".csv");
 
 		StringBuilder infocsv = new StringBuilder();
-		infocsv.append("projectName,loc,fixDurationDays,buildIdFail,teamSize,dateFail,buildIdFix,dateFix\n");
+		infocsv.append(getHeaderAnalysisData());
 
 		for (Project project : projects) {
 			List<FixDuration> failureFixResult = analysisFailureFixPerProject(project);
@@ -93,7 +94,8 @@ public class App implements CommandLineRunner {
 					detectedFixDuration.setGh_project_name(project.getGh_project_name());
 					detectedFixDuration.setBuildFailureId(info.getTr_build_id());
 					detectedFixDuration.setTeamSizeFailure(info.getGh_team_size());
-					detectedFixDuration.setFailureStart(info.getTr_started_at());
+//					detectedFixDuration.setFailureStart(info.getTr_started_at());
+					detectedFixDuration.setFailureStart(info.getGh_build_started_at());
 					detectedFixDuration.setLoc(info.getGh_sloc());
 				} else {
 					continue;
@@ -102,7 +104,8 @@ public class App implements CommandLineRunner {
 			if (failBuild && TravisBuild.PASSED_STATUS.equals(info.getTr_status())) {
 				failBuild = false;
 				detectedFixDuration.setBuildFixId(info.getTr_build_id());
-				detectedFixDuration.setFailureFix(info.getTr_started_at());
+//				detectedFixDuration.setFailureFix(info.getTr_started_at());
+				detectedFixDuration.setFailureFix(info.getGh_build_started_at());
 				project.addFixDuration(detectedFixDuration);
 
 				result.add(detectedFixDuration);
@@ -119,17 +122,20 @@ public class App implements CommandLineRunner {
 		// projectAnalysisMapper.addProject(project);
 		List<FixDuration> result = analysisFailureFixPerProject(project);
 		try {
-			Path path = Paths.get("analysis.csv");
 			StringBuilder infocsv = new StringBuilder();
-			infocsv.append("projectName,loc,fixDuration,buildIdFail,teamsize,dateFail,buildIdFix,dateFix\n");
+			infocsv.append(getHeaderAnalysisData());
 			for (FixDuration fixDuration : result) {
 				System.out.println(fixDuration.getCVSformatInformation());
 				infocsv.append(fixDuration.getCVSformatInformation());
 				infocsv.append("\n");
 			}
-			Files.write(path, infocsv.toString().getBytes());
+			System.out.println(infocsv.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private String getHeaderAnalysisData(){
+		return "projectName,loc,fixDurationDays,buildIdFail,teamSize,dateFail,buildIdFix,dateFix,participationRate\n";
 	}
 }

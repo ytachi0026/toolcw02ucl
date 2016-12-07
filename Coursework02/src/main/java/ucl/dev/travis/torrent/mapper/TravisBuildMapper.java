@@ -11,15 +11,19 @@ import ucl.dev.travis.torrent.bean.TravisBuild;
 
 @Mapper
 public interface TravisBuildMapper {
-	@Select("SELECT * FROM travistorrent_27_10_2016 WHERE row = #{torrentId}")
+//	@Select("SELECT * FROM travistorrent_27_10_2016 WHERE row = #{torrentId}")
+	@Select("SELECT * FROM travistorrent_6_12_2016 WHERE row = #{torrentId}")
 	TravisBuild findByTorrentId(@Param("torrentId") Integer torrentId);
 	
-	@Select("SELECT * FROM travistorrent_27_10_2016 WHERE gh_project_name = #{projectName} ORDER BY tr_build_id")
+//	@Select("SELECT * FROM travistorrent_27_10_2016 WHERE gh_project_name = #{projectName} ORDER BY tr_build_id")
+	@Select("SELECT * FROM travistorrent_6_12_2016 WHERE gh_project_name = #{projectName} ORDER BY tr_build_id")
 	List<TravisBuild> getDataByProject(@Param("projectName") String projectName);
 	
-	@Select("SELECT DISTINCT gh_project_name, gh_lang FROM travistorrent_27_10_2016 ORDER BY gh_lang")
+//	@Select("SELECT DISTINCT gh_project_name, gh_lang FROM travistorrent_27_10_2016 ORDER BY gh_lang")
+	@Select("SELECT DISTINCT gh_project_name, gh_lang FROM travistorrent_6_12_2016 ORDER BY gh_lang")
 	List<Project> getProjectsName();
 
-	@Select("SELECT DISTINCT gh_project_name, gh_lang FROM travistorrent_27_10_2016 WHERE gh_lang = #{language}")
+//	@Select("SELECT DISTINCT gh_project_name, gh_lang FROM travistorrent_27_10_2016 WHERE gh_lang = #{language}")
+	@Select("SELECT DISTINCT gh_project_name, gh_lang FROM travistorrent_6_12_2016 WHERE gh_lang = #{language}")
 	List<Project> getProjectsNamePerLanguage(@Param("language") String language);
 }

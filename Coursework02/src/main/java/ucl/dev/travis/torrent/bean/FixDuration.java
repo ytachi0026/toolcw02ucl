@@ -18,11 +18,20 @@ public class FixDuration implements Serializable {
 	private String buildFixId;
 	private Date failureFix;
 	
+	
+	private Double participationRate;
 
 	public void calculateDaysFixDuration(){
 		durationInDays = (int)((failureFix.getTime() - failureStart.getTime()) / (1000 *60 * 60 *24));
 	}
 	
+	public void calculateParticipationRate(){
+		if(teamSizeFailure > 0){
+			participationRate = (double) durationInDays / teamSizeFailure;
+		} else {
+			participationRate = 0.0;
+		}
+	}
 
 	public String getGh_project_name() {
 		return gh_project_name;
@@ -100,7 +109,8 @@ public class FixDuration implements Serializable {
 	public String toString() {
 		return "FixDuration [gh_project_name=" + gh_project_name + ", loc=" + loc + ", durationInDays=" + durationInDays
 				+ ", buildFailureId=" + buildFailureId + ", failureStart=" + failureStart + ", teamSizeFailure="
-				+ teamSizeFailure + ", buildFixId=" + buildFixId + ", failureFix=" + failureFix + "]";
+				+ teamSizeFailure + ", buildFixId=" + buildFixId + ", failureFix=" + failureFix + ", participationRate="
+				+ participationRate + "]";
 	}
 	
 	public String getCVSformatInformation(){
@@ -121,6 +131,8 @@ public class FixDuration implements Serializable {
 		result.append(buildFixId);
 		result.append(",");
 		result.append(Util.niceFormatDate(failureFix));
+		result.append(",");
+		result.append(Util.fiveDecimalFormat(participationRate));
 		
 		return result.toString();
 	}

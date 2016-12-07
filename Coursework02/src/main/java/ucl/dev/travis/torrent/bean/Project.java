@@ -33,6 +33,7 @@ public class Project implements Serializable{
 	
 	public void addFixDuration (FixDuration fixDuration){
 		fixDuration.calculateDaysFixDuration();
+		fixDuration.calculateParticipationRate();
 		//durationOfFix.add(fixDuration);
 	}
 	
