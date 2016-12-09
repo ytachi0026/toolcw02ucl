@@ -46,7 +46,7 @@ public class App implements CommandLineRunner {
 	}
 
 	/**
-	 * Algorithm for all projects per language
+	 * Algorithm for all projects per language970
 	 */
 	private void analysisProjectsLanguaje(String language, String dumpTravis) {
 		List<Project> projects = travisMapper.getProjectsNamePerLanguage(language);
